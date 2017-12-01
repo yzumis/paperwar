@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div style="display:none;">
+			<img id="stickmanImage" src="images/Stickman.svg" width="165" height="300">
+			<img id="stickmanDeathImage" src="images/StickmanDeath.svg" width="165" height="300">
+			<img id="bulletHoleImage" src="images/BulletHole.svg" width="60" height="60">
+		</div>
+		<canvas id="worldCanvas" width="1200" height="600"></canvas>
+		<script src="scripts/Constants.js"></script>
+		<script src="scripts/Shoot.js"></script>
+		<script src="scripts/Stickman.js"></script>
+		<script src="scripts/GamePhase.js"></script>
+		<script src="scripts/Game.js"></script>
+		<script type="text/javascript">
+
+			var canvas;
+			var context;
+
+			var game;
+
+			initialize();
+			play();
+
+			function initialize() {
+				game = new Game();
+				canvas = document.getElementById('worldCanvas');
+				context = canvas.getContext('2d');
+				canvas.addEventListener("click", mouseListener);
+			}
+
+			function mouseListener(event) {
+				game.processMouseClick(event.clientX, event.clientY);
+			}
+			
+			function play() {
+                
+                draw(context);
+				setTimeout(play, 10);
+			};
+			
+			function draw(context) {
+				drawBackground(context);
+				game.draw(context);
+			};
+			
+			function drawBackground(context) {
+				drawRectangle(context, 'green', 0, 0, X_WORLD_SIZE / 2, Y_WORLD_SIZE);
+				drawRectangle(context, 'green', X_WORLD_SIZE / 2, 0, X_WORLD_SIZE, Y_WORLD_SIZE);
+				drawLine(context,  X_WORLD_SIZE / 2 , 0, X_WORLD_SIZE / 2, Y_WORLD_SIZE, 'black');
+			};
+
+			function drawLine(context, xOrigin, yOrigin, xDestination, yDestination, color) {
+				context.beginPath();
+        		context.strokeStyle = color;
+        		context.moveTo(xOrigin, yOrigin);
+        		context.lineTo(xDestination, yDestination);
+        		context.stroke();
+    		};
+			
+			function drawRectangle(context, color, x, y, xSize, ySize) {
+				context.beginPath();
+				context.rect(x, y, xSize, ySize);
+				context.fillStyle = color;
+				context.fill();
+				context.lineWidth = 1;
+				context.strokeStyle = color;
+				context.stroke();
+			};
+
+		</script>
+	</body>
+</html>
